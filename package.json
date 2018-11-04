@@ -1,0 +1,23 @@
+{
+  "name": "amazon-node-mysql",
+  "version": "1.0.0",
+  "description": "A small clone of amazon in the CL using node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulACoroneos/amazon-node-mysql.git"
+  },
+  "author": "Paul Coroneos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulACoroneos/amazon-node-mysql/issues"
+  },
+  "homepage": "https://github.com/PaulACoroneos/amazon-node-mysql#readme",
+  "dependencies": {
+    "inquirer": "^6.2.0",
+    "mysql": "^2.16.0"
+  }
+}
