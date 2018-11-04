@@ -23,7 +23,6 @@ connection.connect(function(err) {
     //console.log("I'm a connection!")
 });
 
-//we are going to create 10 items from the provided array
 connection.query(
     "SELECT * from products",
     function(err, res) {
