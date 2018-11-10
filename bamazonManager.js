@@ -1,6 +1,16 @@
 //node required includes
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table  = require("cli-table");
+
+var table = new Table();
+let data =[];
+
+// instantiate
+var table = new Table({
+    head: ['Item ID', 'Product Name','Department Name','Product Sales','Price','Stock Quantity']
+  , colWidths: [18, 25,25,25,25,25]
+});
 
 //let's connect to the DB we generate
 
@@ -66,10 +76,18 @@ function productsSale() {
             //Lets make the data look nice
             //console.log(res);
             console.log("Available for purchase\n")
+            // for(let i=0; i<res.length;i++) {
+            //     console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
+            // }
+            //connection.end();
             for(let i=0; i<res.length;i++) {
-                console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
+                //console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
+                data = [];
+                data.push(res[i].itemID,res[i].product_name,res[i].department_name,res[i].product_sales,res[i].price,res[i].stock_quantity);
+                table.push(data);
+                //console.log(table);
             }
-            connection.end();
+            displayTable(table);
         }
     );
 }
@@ -83,10 +101,16 @@ function lowInventory() {
             //console.log(res);
             console.log("Inventory with less than 5 items.\n")
             for(let i=0; i<res.length;i++) {
-                if(res[i].stock_quantity <5)
-                    console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
+                //console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
+                data = [];
+                if(res[i].stock_quantity < 5) {
+                    data.push(res[i].itemID,res[i].product_name,res[i].department_name,res[i].product_sales,res[i].price,res[i].stock_quantity);
+                    table.push(data);
+                }
+                //console.log(table);
             }
-            connection.end();
+            displayTable(table);
+           // connection.end();
         }
     );
 }
@@ -148,7 +172,7 @@ function addInventory() {
 
 function addProduct() {
     let productDepartment,productName,productQuantity,productPrice;
-    console.log("hi");
+    //console.log("hi");
     inquirer
     .prompt (
         [
@@ -200,11 +224,19 @@ function addProduct() {
                         },
                         function(err, res) {
                             console.log(res.affectedRows + " product inserted!\n");
-                            connection.close();
+                            connection.end();
                         }
                     );
                 });
             });
         });   
     });
+}
+
+function displayTable(data) {
+    //console.log(data.toString());
+    console.log(table.toString());
+    // prompt the user for if they want to bid or post
+    //promptUser();
+    connection.end();
 }

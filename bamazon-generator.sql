@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS bamazon_db;
+-- DROP DATABASE IF EXISTS bamazon_db;
 
-CREATE DATABASE bamazon_db;
+-- CREATE DATABASE bamazon_db;
 
 USE bamazon_db;
 
@@ -10,6 +10,7 @@ CREATE table products (
     department_name VARCHAR(50) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     stock_quantity INTEGER NOT NULL,
+    product_sales DECIMAL(10,2) DEFAULT 0,
     PRIMARY KEY (itemID)
 );
 

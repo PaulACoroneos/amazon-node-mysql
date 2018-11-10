@@ -1,6 +1,16 @@
 //node required includes
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table  = require("cli-table");
+
+var table = new Table();
+let data =[];
+
+// instantiate
+var table = new Table({
+    head: ['Item ID', 'Product Name','Department Name','Product Sales','Price','Stock Quantity']
+  , colWidths: [18, 25,25,25,25,25]
+});
 
 //let's connect to the DB we generate
 
@@ -31,10 +41,13 @@ connection.query(
       //console.log(res);
       console.log("Available for purchase\n")
       for(let i=0; i<res.length;i++) {
-          console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
-      }
-      // prompt the user for if they want to bid or post
-      promptUser();
+            //console.log("itemID: ",res[i].itemID,"\nProduct Name: ",res[i].product_name,"\nDepartment Name: ",res[i].department_name,"\nPrice: ",res[i].price,"\nStock Quantity: ",res[i].stock_quantity,"\n");
+            data = [];
+            data.push(res[i].itemID,res[i].product_name,res[i].department_name,res[i].product_sales,res[i].price,res[i].stock_quantity);
+            table.push(data);
+            //console.log(table);
+        }
+        displayTable(table);
     }
 );
 
@@ -92,12 +105,15 @@ function transactionCheck(quantity,id) {
 function transactAndTotal (quantity,id,stock,price) {
     //console.log(quantity,id,stock);
     let newStock = stock-quantity.quantity; 
+    let newSales = quantity.quantity*price;
     //okay let's do this
     connection.query(
         "UPDATE products SET ? WHERE ?",
         [
           {
-            stock_quantity: newStock
+            stock_quantity: newStock,
+            product_sales: newSales
+
           },
           {
             itemID: id.id
@@ -106,4 +122,12 @@ function transactAndTotal (quantity,id,stock,price) {
     );
     console.log("Your total is: $",quantity.quantity*price,"\nThanks for your business!");    
     connection.end();
+}
+
+function displayTable(data) {
+    //console.log(data.toString());
+    console.log(table.toString());
+    // prompt the user for if they want to bid or post
+    promptUser();
+    //connection.end();
 }
